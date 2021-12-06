@@ -65,7 +65,6 @@ jobs:
           name: dist
           path: dist
       - name: PyPI upload
-        if: ${{ secrets.PYPI_API_TOKEN }}
         uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
