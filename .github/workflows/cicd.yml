@@ -1,0 +1,77 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - "main"
+    tags: ["v*"]
+
+jobs:
+  build-tarball:
+    name: Tarball
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Update pip, wheel, setuptools, build, twine
+        run: |
+          python -m pip install -U pip wheel setuptools build twine
+      - name: Make sdist
+        run: |
+          python -m build --sdist
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+  build-wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Update pip, wheel, setuptools, build, twine
+        run: |
+          python -m pip install -U pip wheel setuptools build twine
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.3.0
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./wheelhouse/*.whl
+
+  deploy:
+    name: Deploy
+    environment: release
+    needs: [build-tarball, build-wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update pip, wheel, setuptools, build, twine
+        run: |
+          python -m pip install -U pip wheel setuptools build twine
+      - name: Download dist
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+      - name: PyPI upload
+        if: ${{ secrets.PYPI_API_TOKEN }}
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: levenshtein-cpp
+          artifacts: dist/*
+          token: ${{ secrets.GITHUB_TOKEN }}
