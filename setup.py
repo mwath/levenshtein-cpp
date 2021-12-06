@@ -1,6 +1,6 @@
 import re
 
-from pybind11.setup_helpers import Pybind11Extension
+from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
 
 version_regex = r"VERSION_(MAJOR|MINOR|PATCH)\s*=\s*(\d+);"
@@ -49,4 +49,5 @@ setup(
             include_dirs=['levenshtein/inc'],
         ),
     ],
+    cmdclass={"build_ext": build_ext}
 )
