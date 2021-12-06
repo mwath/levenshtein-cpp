@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 
 namespace lev {
 int distance(std::string a, std::string b) {
@@ -26,7 +27,7 @@ int distance(std::string a, std::string b) {
     for (auto j = 1; j < cols; ++j) {
         for (auto i = 1; i < rows; ++i) {
             matrix[i * cols + j] = std::min({
-                matrix[(i - 1) * cols * j] + 1, // deletion
+                matrix[(i - 1) * cols + j] + 1, // deletion
                 matrix[i * cols + j - 1] + 1, // insertion
                 matrix[(i - 1) * cols + j - 1] + (a[i - 1] != b[j - 1]) // substitution
             });
