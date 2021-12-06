@@ -1,4 +1,3 @@
-import os
 import re
 
 from pybind11.setup_helpers import Pybind11Extension
@@ -8,8 +7,6 @@ version_regex = r"VERSION_(MAJOR|MINOR|PATCH)\s*=\s*(\d+);"
 
 
 def get_version():
-    print(os.getcwd())
-    os.system("tree")
     with open("levenshtein/inc/levenshtein.hpp") as f:
         versions = dict(re.findall(version_regex, f.read()))
 
@@ -30,7 +27,7 @@ setup(
         "levenshtein.inc",
     ],
     package_data={
-        "levenshtein": [],
+        "levenshtein": ["py.typed", "*.pyi"],
         "levenshtein.inc": ["*.hpp"]
     },
     author="Walravens Mathieu",
