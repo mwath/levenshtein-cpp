@@ -30,6 +30,7 @@ setup(
         "levenshtein": ["py.typed", "*.pyi"],
         "levenshtein.inc": ["*.hpp"]
     },
+    include_package_data=True,
     author="Walravens Mathieu",
     license=LICENSE,
     description="A small levenshtein algorithm in cpp",
