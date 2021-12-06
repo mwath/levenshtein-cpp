@@ -68,6 +68,7 @@ jobs:
         if: ${{ secrets.PYPI_API_TOKEN }}
         uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
+          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
       - name: GitHub Release
         uses: ncipollo/release-action@v1
