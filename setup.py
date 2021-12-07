@@ -16,11 +16,7 @@ def get_version():
         return "{MAJOR}.{MINOR}.{PATCH}".format(**versions)
 
 
-with open("LICENSE") as f:
-    LICENSE = f.read()
-
 setup(
-    name="levenshtein-cpp",
     version=get_version(),
     packages=[
         "levenshtein",
@@ -31,14 +27,6 @@ setup(
         "levenshtein.inc": ["*.hpp"]
     },
     include_package_data=True,
-    author="Walravens Mathieu",
-    license=LICENSE,
-    description="A small levenshtein algorithm in cpp",
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-    ],
-    python_requires=">=3.8",
     ext_modules=[
         Pybind11Extension(
             "levenshtein",
