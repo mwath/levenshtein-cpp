@@ -36,4 +36,11 @@ int distance(std::string a, std::string b) {
 
     return matrix[rows * cols - 1];
 }
+
+float ratio(std::string a, std::string b) {
+    float dist   = (float)distance(a, b);
+    float length = (float)std::max(a.length(), b.length());
+
+    return (1 - dist / length) * 100;
+}
 } // namespace lev
